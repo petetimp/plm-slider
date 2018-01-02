@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8">
+<title>PLM Slider</title>
+<!--Animations-->
+<link rel="stylesheet" href="https://daneden.github.io/animate.css/animate.min.css?ver=4.9.1" type="text/css" media="all">
+<!--plmSlider.css-->
+<link rel="stylesheet" href="/css/plmSlider.css" type="text/css" media="all">
+<!--FontAwesome-->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<!--jQuery-->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<style type="text/css">
+	/* Webfont: Lato-Italic */
+	@font-face {
+	  font-family: 'LatoWeb';
+	  src: url('/fonts/Lato-Regular.eot');
+	  /* IE9 Compat Modes */
+	  src: url('/fonts/Lato-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('/fonts/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */ url('/fonts/Lato-Regular.woff') format('woff'), /* Modern Browsers */ url('/fonts/Lato-Regular.ttf') format('truetype');
+	  font-weight: normal;
+	  text-rendering: optimizeLegibility;
+	}
+	
+	/* Webfont: Lato-Thin */
+	@font-face {
+	  font-family: 'LatoWebThin';
+	  src: url('/fonts/Lato-Thin.eot');
+	  /* IE9 Compat Modes */
+	  src: url('/fonts/Lato-Thin.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('/fonts/Lato-Thin.woff2') format('woff2'), /* Modern Browsers */ url('/fonts/Lato-Thin.woff') format('woff'), /* Modern Browsers */ url('/fonts/Lato-Thin.ttf') format('truetype');
+	  font-style: normal;
+	  font-weight: normal;
+	  text-rendering: optimizeLegibility;
+	}
+
+	#mainContent #plm-slider {
+    	background-image: url(/images/gradient-box.png);
+    	min-height: 500px;
+	    clear: both;
+	    width: 350px;
+	    margin: 0 auto;
+	    max-width: 75%;
+	    position: relative;
+	    background-size: cover;
+	}
+
+	#mainContent #plm-slider p {
+    	text-align: center;
+    	color: white;
+    	font-family: LatoWeb;
+	    font-size: 18px;
+	    padding: 20px 15px 0;
+	    font-weight:bold;
+	    text-shadow: 1px 1px 1px #222;
+	}
+	
+	#mainContent #plm-slider h3 {
+    	color: #ffffff;
+    	background-color: #1c4359;
+    	margin: 0;
+    	text-align: center;
+    	font-size: 28px;
+    	padding: 10px;
+    	font-family: LatoWebThin;
+	}
+</style>
+</head>
+
+<body>
+<div id="mainContent">
+	<div id="plm-slider">
+		<h3>TESTIMONIALS</h3>
+		<!--Prev Arrow-->
+		<div class="arrow arrow-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></div>
+		<div data-wow-duration="1s" class="wow" id='slide-1'>
+			<p>"Richard C. Klein helped me get the help I needed from my ex to raise and care for my autistic child. He came recommended for special needs child cases and I was satisfied with his effort and the outcome of my case." - Client</p>
+		</div>
+		<div data-wow-duration="1s" class="wow" id='slide-2'>
+			<p>"Mr. Klein has battled relentlessly to help me achieve custody of my child . His skill and dedication and accessibility is something that has helped me through this period. He is always there and is a skilled negotiator as well. He has become far more that just my “divorce attorney”. I know that I am protected with his help." - K.R.</p>
+		</div>
+		<div data-wow-duration="1s" class="wow" id='slide-3'>
+			<p>"I had a spouse who would simply not follow Court Orders. Richard knew just how to get the protection for myself and my daughter that I needed. He was always there with kind words and skilled beyond my expectations." - N.B.</p>
+		</div>
+		<div data-wow-duration="1s" class="wow" id='slide-4'>
+			<p>"Over 10 years ago Mr. Klein handled my divorce. He negotiated an agreement that worked perfectly. All of these years later, when it came time for me to retire, I went back to him. I would not consider another attorney. He has argued forcefully in Court for me and I know that I am in the best of hands with him." - G. McG</p>
+		</div>
+		<!--Next Arrow-->
+		<div class="arrow arrow-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>
+	</div>
+</div>
+<script> 
+	$(document).ready(
+		function(){
+			plmSlider.init(
+				{	
+					runSlides: 8000,
+					inAnimation: "lightSpeedIn",
+					outAnimation: "lightSpeedOut",
+					dots: true,
+					arrows: true
+					//pauseOnHover: false
+				}
+
+			);
+		}	
+	);
+</script>
+<!--Wow.js-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js?ver=4.9.1"></script>
+<script type="text/javascript" src="/js/plmSlider.js"></script>
+</body>
+</html>
