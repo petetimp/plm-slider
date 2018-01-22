@@ -1,13 +1,10 @@
-var plmSlider = {
+const plmSlider = {
 	
 	/**
 	 * Number of slides in DOM
 	 * @return - number of slides
-   	 **/
-	numSlides : 
-		function(){
-			return $( "#plm-slider .wow").length;
-		},
+   **/
+	numSlides : () => { return $( "#plm-slider .wow").length },
 		
 	slideInterval: {},
 						
@@ -28,9 +25,9 @@ var plmSlider = {
 	sliderAnimate : 
 		function(){
 		    if(this.firstRun){
-			    plmSlider.slideInterval = setInterval(this.moveSlider,1000);//starts slider on page load after 1 second
+			    this.slideInterval = setInterval(this.moveSlider.bind(plmSlider),1000);//starts slider on page load after 1 second
 		    }else{
-		        plmSlider.slideInterval = setInterval(this.moveSlider,this.runSlides);    
+		      this.slideInterval = setInterval(this.moveSlider.bind(plmSlider),this.runSlides);    
 		    }
 		},
 	
@@ -39,6 +36,7 @@ var plmSlider = {
    	 **/	
 	init:
 		function(config){
+      
 			for (prop in config){
 				if (config.hasOwnProperty(prop)) {
 					this[prop] = config[prop];
@@ -60,34 +58,34 @@ var plmSlider = {
 		function(){
 			//Pressed the left arrow
 			$(".arrow-left").click(
-				function(){
-					clearInterval(plmSlider.slideInterval);
-					var id = "#" + $('.currSlide').attr("id");
-                    plmSlider.moveSlider(id, "prev");
+				() => {
+					clearInterval(this.slideInterval);
+					const id = "#" + $('.currSlide').attr("id");
+          this.moveSlider(id, "prev");
 				}
 			);
 			
 			//Pressed the right arrow
 			$(".arrow-right").click(
-				function(){
-					clearInterval(plmSlider.slideInterval);
+				() => {
+					clearInterval(this.slideInterval);
 					var id = "#" + $('.currSlide').attr("id");
-					plmSlider.moveSlider(id, "next");
+					this.moveSlider(id, "next");
 				}
 			);
 			
 			//Stops slider on mouseenter. Starts slider on mouseleave.
 			$("#plm-slider").hover(
-				function(){
-				    if(plmSlider.pauseOnHover){
-					    clearInterval(plmSlider.slideInterval);
+				() => {
+				    if(this.pauseOnHover){
+					    clearInterval(this.slideInterval);
 				    }else{
 				        return false;//if we aren't pausing on hover, don't clear interval
 				    }
 				},
-				function(){
-				    if(plmSlider.pauseOnHover){
-					    plmSlider.slideInterval = setInterval(plmSlider.moveSlider, plmSlider.runSlides);
+				() => {
+				    if(this.pauseOnHover){
+					    this.slideInterval = setInterval(this.moveSlider.bind(this), this.runSlides);
 				    }else{
 				        return false;//if we aren't pausing on hover, don't run interval
 				    }
@@ -110,7 +108,7 @@ var plmSlider = {
 					}else{//same slide - do nothing
 						return false;
 					}
-					
+					console.log(plmSlider);
 					clearInterval(plmSlider.slideInterval);
 					$(this).addClass("future");//this is used as a hook to navigate to the specific slide
 					
@@ -124,11 +122,15 @@ var plmSlider = {
 	 **/
 	createDots:
 		function(){
-			var numSlides = this.numSlides();
-			var dotsHTML = "<ul id='slideDots'>";
+			const numSlides = this.numSlides();
+			let dotsHTML = "<ul id='slideDots'>";
 			
 			for(var i = 0; i < numSlides; i++){
-				dotsHTML += "<li data-slide='#slide-" + Number(i+1) + "'><i class='fa fa-circle-o' aria-hidden='true'></i></li>";
+        if (i == 0){
+				  dotsHTML += "<li class='future' data-slide='#slide-" + Number(i+1) + "'><i class='fa fa-circle-o' aria-hidden='true'></i></li>";
+        }else{
+          dotsHTML += "<li data-slide='#slide-" + Number(i+1) + "'><i class='fa fa-circle-o' aria-hidden='true'></i></li>"; 
+        }
 			}
 			
 			dotsHTML += "</ul>";
@@ -142,78 +144,78 @@ var plmSlider = {
 	 * @param direction - {{string}} direction slide is going. will be 'prev' or 'next'
 	 **/	
 	moveSlider:
-		function(id, direction){
-			var id = id || "#" + $('.currSlide').attr("id");
-			var direction = direction || "next";
-			var edgeSlide = false;
+		function(id,direction){
+			const slideId = this.firstRun ? "#" + $('#slide-1').attr("id") : $('.currSlide') ? "#" + $('.currSlide').attr("id")  :  id;
+			const slideDirection = direction == undefined ? "next" : direction;
+			let edgeSlide = false;
 			//With the exception of the first time the slider runs, this block sets the 'out' animation for the current slide 
-			if(!plmSlider.firstRun){
-			    plmSlider.setOutAnimation($(".currSlide"));
+			if(!this.firstRun){
+			    this.setOutAnimation($(".currSlide"));
 			}else{
-			    plmSlider.setInAnimation($('#slide-1'));//set the 'in' animation the first time the slider runs
-			    if(plmSlider.dots){
-			    	$('[data-slide="#slide-1"]').addClass("future");
-			    	plmSlider.syncDots();
+			    this.setInAnimation($('#slide-1'));//set the 'in' animation the first time the slider runs
+			    if(this.dots){
+			    	//$('[data-slide="#slide-1"]').addClass("future");
+			    	this.syncDots();
 			    }
 			}
 			
 			//In this code block we are setting appropriate animations based on slide direction and handling exception slides (first,last)
-			if($(".wow:first").hasClass("currSlide") && (direction == "prev" || direction == "backwardDot")){//We're moving from the first slide to the last one
+			if($(".wow:first").hasClass("currSlide") && (slideDirection == "prev" || slideDirection == "backwardDot")){//We're moving from the first slide to the last one
 				edgeSlide = true;
-				plmSlider.setInAnimation($("#slide-" + plmSlider.numSlides()));
-				if(plmSlider.dots){
-					$('[data-slide="#slide-' + plmSlider.numSlides() + '"]').addClass("future");
+				this.setInAnimation($("#slide-" + this.numSlides()));
+				if(this.dots){
+					$('[data-slide="#slide-' + this.numSlides() + '"]').addClass("future");
 				}
-			}else if($(".wow:last").hasClass("currSlide") && (direction == "next" || direction == "forwardDot")){//We're moving from the last slide to the first one
+			}else if($(".wow:last").hasClass("currSlide") && (slideDirection == "next" || slideDirection == "forwardDot")){//We're moving from the last slide to the first one
 			    edgeSlide = true;
-			    plmSlider.setInAnimation($("#slide-1"));
-			    if(plmSlider.dots){
+			    this.setInAnimation($("#slide-1"));
+			    if(this.dots){
 					$('[data-slide="#slide-1"]').addClass("future");
 			    }
 			}else{
-			    if(direction == "prev"){//we're moving backward
-				    plmSlider.setInAnimation($(".currSlide").prev());
-				    if(plmSlider.dots){
+			    if(slideDirection == "prev"){//we're moving backward
+				    this.setInAnimation($(".currSlide").prev());
+				    if(this.dots){
 				    	$('[data-slide="#' + $(".currSlide").prev().attr("id") + '"]').addClass("future");
 				    }
-			    }else if(direction == "next"){
-			        plmSlider.setInAnimation($(".currSlide").next());//we're moving forward
-			        if(plmSlider.dots){
+			    }else if(slideDirection == "next"){
+			        this.setInAnimation($(".currSlide").next());//we're moving forward
+			        if(this.dots){
 			        	$('[data-slide="#' + $(".currSlide").next().attr("id") + '"]').addClass("future");
 			        }
 			    }else{//forward or backward with dot press
-			    	plmSlider.setInAnimation($($(".future").attr("data-slide")));	
+			    	this.setInAnimation($($(".future").attr("data-slide")));	
 			    }
 			}
 		    
 		    //this only happens the first time the slider runs when the page loads.
-		    if(plmSlider.firstRun){
-		        plmSlider.firstRun = false;
+		    if(this.firstRun){
+		        this.firstRun = false;
 		        $("#slide-1").addClass('currSlide');
+            this.triggerWow();
 		        setTimeout(function(){$('#slide-1').show()},1000);//we set a timeout so that the 'out' and 'in' animations have time to show
-		        plmSlider.triggerWow();
-		        clearInterval(plmSlider.slideInterval);//clear the interval so that we can go to default interval
-		        plmSlider.slideInterval = setInterval(plmSlider.moveSlider, plmSlider.runSlides);
+		        clearInterval(this.slideInterval);//clear the interval so that we can go to default interval
+		        this.slideInterval = setInterval(this.moveSlider.bind(plmSlider), this.runSlides);
 		    }else{//normal progression
-			    plmSlider.triggerWow();
+			    this.triggerWow();
     			setTimeout(
-    			    function() {
-    			        $(id).hide().removeClass("currSlide");
-    			        if(direction == "next"){//moving forward
+    			    () => {
+    			        $(slideId).hide().removeClass("currSlide");
+    			        if(slideDirection == "next"){//moving forward
             				if(edgeSlide){//moving from last to first slide
             					$("#slide-1").show().addClass("currSlide");	
             				}else{
-            					$(id).next().show().addClass("currSlide");//moving forward from slide to slide
+            					$(slideId).next().show().addClass("currSlide");//moving forward from slide to slide
             			    }	
-            			}else if(direction == "prev"){//moving backward
+            			}else if(slideDirection == "prev"){//moving backward
             				if(edgeSlide){//moving from first to last slide
-            					$("#slide-" + plmSlider.numSlides()).show().addClass("currSlide");	
+            					$("#slide-" + this.numSlides()).show().addClass("currSlide");	
             				}else{
-            					$(id).prev().show().addClass("currSlide");//moving backward from slide to slide
+            					$(slideId).prev().show().addClass("currSlide");//moving backward from slide to slide
             				}
-    			        }else if(direction == "backwardDot"){//backward with dot press
+    			        }else if(slideDirection == "backwardDot"){//backward with dot press
     			        	if(edgeSlide){//moving from first to last slide
-            					$("#slide-" + plmSlider.numSlides()).show().addClass("currSlide");	
+            					$("#slide-" + this.numSlides()).show().addClass("currSlide");	
             				}else{
             					$($(".future").attr("data-slide")).show().addClass("currSlide");//moving backward
             				}	
@@ -225,7 +227,7 @@ var plmSlider = {
             			    }			
     			        }
     			        
-    			        if(plmSlider.dots){ plmSlider.syncDots(); }
+    			        if(this.dots){ this.syncDots(); }
 			            
     			    }, 1000 //we set a timeout so that the 'out' and 'in' animations have time to show
     			);
@@ -256,11 +258,11 @@ var plmSlider = {
 			}catch(error){
 				console.error("Please include the WOW.js library");
 			}
-			 $('.wow').each(
-                function(){
-                    $(this).removeClass('animated');//get rid of extra 'animated' classes for cosmetic purposes
-                }    
-            );
+			$('.wow').each(
+        function(){
+          $(this).removeClass('animated');//get rid of extra 'animated' classes for cosmetic purposes
+        }    
+      );
 		},
 		
 	/**
@@ -269,7 +271,7 @@ var plmSlider = {
 	 **/	
 	setOutAnimation:
 	    function(elem){
-	        elem.removeClass(plmSlider.inAnimation).css("animation-name",plmSlider.outAnimation).addClass(plmSlider.outAnimation);    
+	        elem.removeClass(this.inAnimation).css("animation-name",this.outAnimation).addClass(this.outAnimation);    
 	    },
 	    
 	/**
@@ -278,7 +280,7 @@ var plmSlider = {
 	 **/
 	setInAnimation:
 	    function(elem){
-	        elem.removeClass(plmSlider.outAnimation).css("animation-name",plmSlider.inAnimation).addClass(plmSlider.inAnimation);    
+	        elem.removeClass(this.outAnimation).css("animation-name",this.inAnimation).addClass(this.inAnimation);    
 	    }
 
 };
