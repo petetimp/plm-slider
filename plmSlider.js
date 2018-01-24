@@ -22,6 +22,9 @@ const plmSlider = {
 	
 	dots: false,
 
+  /**
+	 * Function that sets the interval for moving between slides
+   **/	
 	sliderAnimate : 
 		function(){
 		    if(this.firstRun){
@@ -33,7 +36,7 @@ const plmSlider = {
 	
 	/**
 	 * Inital function that fires as soon as document is ready. Sets required properties from config object, events, and makes call to start slide
-   	 **/	
+   **/	
 	init:
 		function(config){
       
@@ -95,11 +98,11 @@ const plmSlider = {
 			//Pressed a dot
 			$(document).on("click", "#slideDots li",
 				function(){
-					var currentSlide = "#" + $('.currSlide').attr("id");
-					var futureSlide = $(this).attr("data-slide");
-					var currentSlideNum = Number(currentSlide.substring(currentSlide.indexOf('-') + 1));
-					var futureSlideNum = Number(futureSlide.substring(futureSlide.indexOf('-') + 1));
-					var direction;
+					const currentSlide = "#" + $('.currSlide').attr("id");
+					const futureSlide = $(this).attr("data-slide");
+					const currentSlideNum = Number(currentSlide.substring(currentSlide.indexOf('-') + 1));
+				  const futureSlideNum = Number(futureSlide.substring(futureSlide.indexOf('-') + 1));
+					let direction;
 				
 					if(currentSlideNum < futureSlideNum ){//moving foward
 						direction = 'forwardDot';
@@ -108,7 +111,6 @@ const plmSlider = {
 					}else{//same slide - do nothing
 						return false;
 					}
-					console.log(plmSlider);
 					clearInterval(plmSlider.slideInterval);
 					$(this).addClass("future");//this is used as a hook to navigate to the specific slide
 					
@@ -125,7 +127,7 @@ const plmSlider = {
 			const numSlides = this.numSlides();
 			let dotsHTML = "<ul id='slideDots'>";
 			
-			for(var i = 0; i < numSlides; i++){
+			for(let i = 0; i < numSlides; i++){
         if (i == 0){
 				  dotsHTML += "<li class='future' data-slide='#slide-" + Number(i+1) + "'><i class='fa fa-circle-o' aria-hidden='true'></i></li>";
         }else{
